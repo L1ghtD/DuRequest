@@ -24,3 +24,12 @@ npm install webpack-dev-server -D
 # 启动服务
 npm run serve
 ```
+
+# 封装 axios
+目的：
+- 防止以后更换 http 请求库，以后方便更换
+- 加入自有逻辑
+
+```shell
+npm install axios
+```
