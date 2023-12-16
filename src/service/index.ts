@@ -12,7 +12,7 @@ export const duRequest2 = new DuRequest({
   timeout: 8000,
 
   interceptors: {
-    requestSucessFunc: (config) => {
+    requestSuccessFunc: (config) => {
       console.log("2号实例请求成功拦截器");
       return config
     },
@@ -20,7 +20,7 @@ export const duRequest2 = new DuRequest({
       console.log("2号实例请求失败拦截器");
       return err
     },
-    responseSucessFunc: (res) => {
+    responseSuccessFunc: (res) => {
       console.log("2号实例响应成功拦截器");
       return res
     },

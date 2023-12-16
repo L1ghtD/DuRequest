@@ -1,9 +1,10 @@
-import type { InternalAxiosRequestConfig, AxiosResponse, AxiosRequestConfig } from "axios"
+import { type InternalAxiosRequestConfig, type AxiosResponse, type AxiosRequestConfig } from "axios"
 
 interface DuInterceptors {
-    requestSucessFunc?: (config: InternalAxiosRequestConfig) => InternalAxiosRequestConfig
+    // todo(any)
+    requestSuccessFunc?: (config: any) => any
     requestFailFunc?: (err: any) => any
-    responseSucessFunc?: (res: AxiosResponse) => AxiosResponse
+    responseSuccessFunc?: (res: AxiosResponse) => AxiosResponse
     responseFailFunc?: (err: any) => any
   }
 
