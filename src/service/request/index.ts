@@ -1,6 +1,7 @@
 import axios from "axios"
 import type { Axios, AxiosInstance, AxiosResponse } from "axios"
 import DuRequestConfig from "./type"
+import { DuInternalRequestConfig } from "./type"
 
 /*
 * 1 拦截器有三种情况
@@ -13,7 +14,7 @@ class DuRequest {
   instance: AxiosInstance
 
   // request 实例 => axios 实例
-  constructor(config: DuRequestConfig) {
+  constructor(config: DuInternalRequestConfig) {
     this.instance = axios.create(config)
 
     this.instance.interceptors.request.use(config =>{
