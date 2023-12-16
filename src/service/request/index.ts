@@ -92,8 +92,18 @@ class DuRequest {
     })
   }
 
-  get() { }
-  post() { }
+  get<T = any>(config: DuRequestConfig<T>) { 
+    return this.request({...config, method: "GET"})
+  }
+  post<T = any>(config: DuRequestConfig<T>) { 
+    return this.request({...config, method: "POST"})
+  }
+  patch<T = any>(config: DuRequestConfig<T>) { 
+    return this.request({...config, method: "PATCH"})
+  }
+  delete<T = any>(config: DuRequestConfig<T>) { 
+    return this.request({...config, method: "DELETE"})
+  }
 }
 
 export default DuRequest
