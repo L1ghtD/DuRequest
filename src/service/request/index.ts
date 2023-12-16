@@ -1,5 +1,5 @@
 import axios from "axios"
-import type { AxiosInstance } from "axios"
+import type { Axios, AxiosInstance, AxiosResponse } from "axios"
 import DuRequestConfig from "./type"
 
 /*
@@ -24,9 +24,10 @@ class DuRequest {
       return err
     })
 
-    this.instance.interceptors.response.use(config => {
+    this.instance.interceptors.response.use(res => {
       console.log("全局响应成功拦截器");
-      return config
+      // 修改全局拦截，直接返回data
+      return res.data
     }, err => {
       console.log("全局响应失败拦截器");
       return err
@@ -61,22 +62,29 @@ class DuRequest {
 
   // 对于同一实例的不同请求，不能直接加在 request config 里的 interceptors 属性中
   // 因为同一实例的 interceptors 属性是共享的,会存在干扰
-  request(config: DuRequestConfig) {
+  // 只能在这里主动调用函数
+  request<T = any>(config: DuRequestConfig) {
     // 单次请求的成功拦截处理
     if (config.interceptors?.requestSuccessFunc){
       // 手动执行该次请求的 requestSuccessFunc
-      config.interceptors.requestSuccessFunc(config)
+      config = config.interceptors.requestSuccessFunc(config)
     }
 
     // return this.instance.request(config)
     // 对于单次响应的拦截处理，应该在返回 promise 之前处理，所以需要手动构造一个promise，在里面插入逻辑
-    return new Promise((resove, reject)=>{
-      this.instance.request(config).then(res => {
+    //
+    // 新增 Promise 类型(原AxiosResponse),让 res.data 有效
+    // return new Promise<AxiosResponse>((resolve, reject)=>{
+    //
+    // 这里的 T 由 request 传递类型进来
+    return new Promise<T>((resolve, reject)=>{
+      // 默认 request 返回的是 axiosResponse 类型，但这次需要改成由 request 传进来的类型，默认 request 已在第二个泛型参数实现
+      this.instance.request<any, T>(config).then(res => {
         // 在 res 返回之前执行 responeSucessFunc
         if (config.interceptors?.responseSuccessFunc){
-         config.interceptors.responseSuccessFunc(res)
+          // res = config.interceptors.responseSuccessFunc(res)
         }
-        resove(res)
+        resolve(res)
       }).catch(err => {
         reject(err)
       })
