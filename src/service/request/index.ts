@@ -63,7 +63,7 @@ class DuRequest {
   // 对于同一实例的不同请求，不能直接加在 request config 里的 interceptors 属性中
   // 因为同一实例的 interceptors 属性是共享的,会存在干扰
   // 只能在这里主动调用函数
-  request<T = any>(config: DuRequestConfig) {
+  request<T = any>(config: DuRequestConfig<T>) {
     // 单次请求的成功拦截处理
     if (config.interceptors?.requestSuccessFunc){
       // 手动执行该次请求的 requestSuccessFunc
@@ -82,7 +82,7 @@ class DuRequest {
       this.instance.request<any, T>(config).then(res => {
         // 在 res 返回之前执行 responeSucessFunc
         if (config.interceptors?.responseSuccessFunc){
-          // res = config.interceptors.responseSuccessFunc(res)
+          res = config.interceptors.responseSuccessFunc(res)
         }
         resolve(res)
       }).catch(err => {
